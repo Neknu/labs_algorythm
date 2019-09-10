@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/University/labs_algotythm/lab1/main.cpp
+iostream
+-
+fstream
+-
+string
+-
+random
+-
+algorithm
+-
+functional
+-
+chrono
+-
+
