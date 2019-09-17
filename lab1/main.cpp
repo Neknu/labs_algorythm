@@ -21,6 +21,10 @@ int const FILES = 7; // less than 10 plz
 
 int fib[1000000][FILES] = {0};
 int arr[SIZE] = {0};
+int merg[FILES] = {0};
+
+ifstream read_files[FILES];
+ofstream write_files[FILES];
 
 int rand_num(int max) {
     static std::random_device rd;
@@ -95,7 +99,7 @@ int find_max(int i) {
     return res;
 }
 
-void share_data_fibonachi() {
+int share_data_fibonachi() {
     int rec = (COUNT / SIZE) + 1;
     fib[0][0] = 1;
     int pivot = -1;
@@ -129,7 +133,6 @@ void share_data_fibonachi() {
 
     string filename;
 
-    ofstream write_files[FILES];
     for(int i = 0; i < FILES; i++){
         string filename;
 
@@ -138,7 +141,7 @@ void share_data_fibonachi() {
         write_files[i].close();
     }
 
-    ifstream read_files[FILES];
+
     int toRestore = 0;
     for(int i = 0; i < FILES; i++){
         filename = "data" + std::to_string(i) + ".bin";
@@ -180,13 +183,69 @@ void share_data_fibonachi() {
         write_files[l].write((char *) &br, sizeof(br));
         write_files[l].close();
     }
+    return position;
 }
 
 
+int find_min() {
+    int res = -1;
+    int mini = INT_MAX;
+    for(int i = 0; i < FILES; i++) {
+        if(merg[i] > 0 && merg[i] < mini) {
+            mini = merg[i];
+            res = i;
+        }
+    }
+    return res;
+}
+
+void open_files(int current) {
+    for(int i = 0; i < FILES; i++){
+        string filename;
+        filename = "data" + std::to_string(i) + ".bin";
+        if(i == current) {
+            write_files[i].open(filename, ios::binary);
+        }
+        else {
+            read_files[i].open(filename, ios::binary);
+        }
+    }
+}
+
+void close_files(int current) {
+    for(int i = 0; i < FILES; i++){
+        if(i == current) {
+            write_files[i].close();
+        }
+        else {
+            read_files[i].close();
+        }
+    }
+}
+
+int find_output(int pos) {
+    for(int i = 0; i < FILES; i++) {
+        if(fib[pos][i] == 0)
+            return i;
+    }
+}
+
+
+void merge_files(int position) {
+    int current_output;
+    for(int i = position; i > 1; i--) {
+        current_output = find_output(i);
+        while(find_min() >= 0) {
+
+        }
+    }
+}
+
 
 int main (){
-
-    share_data_fibonachi();
+    int position;
+    position = share_data_fibonachi();
+    merge_files(position);
 
 
     return 0;
