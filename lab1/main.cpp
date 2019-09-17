@@ -15,8 +15,8 @@ using std::ofstream;
 using std::ifstream;
 using std::ios;
 
-int const COUNT = 10000;
-int const SIZE = 1000;
+int const COUNT = 1000;
+int const SIZE = 100;
 int const FILES = 7; // less than 10 plz
 
 int fib[1000000][FILES] = {0};
@@ -172,10 +172,10 @@ int share_data_fibonachi() {
             quickSort(arr, 0, j - 1);
 
             for (int i = 0; i < j - 1; i++) {
-                cout << arr[i] << " ";
+//                cout << arr[i] << " ";
                 write_files[l].write((char *) &arr[i], sizeof(arr[i]));
             }
-            cout << endl;
+//            cout << endl;
             int br = -1;
             write_files[l].write((char *) &br, sizeof(br));
         }
@@ -191,7 +191,7 @@ int find_min() {
     int res = -1;
     int mini = INT_MAX;
     for(int i = 0; i < FILES; i++) {
-        if(merg[i] > 0 && merg[i] < mini) {
+        if(merg[i] >= 0 && merg[i] < mini) {
             mini = merg[i];
             res = i;
         }
@@ -228,16 +228,56 @@ int find_output(int pos) {
         if(fib[pos][i] == 0)
             return i;
     }
+    return 0;
+}
+
+int find_count_merges_fib(int pos) {
+    int mini = INT_MAX;
+    for(int i = 0; i < FILES; i++) {
+        if (fib[pos][i] > 0 && fib[pos][i] < mini) {
+            mini = fib[pos][i];
+        }
+    }
+    cout << mini << endl;
+    return mini;
 }
 
 
 void merge_files(int position) {
     int current_output;
-    for(int i = position; i > 1; i--) {
+    int count_merges;
+    int toRestore = 0;
+    int curr = 0;
+    int value = 0;
+    for(int i = position; i >= 1; i--) {
         current_output = find_output(i);
-        while(find_min() >= 0) {
-
+        open_files(current_output);
+        count_merges = find_count_merges_fib(i);
+        for(int k = 0; k < count_merges; k++) {
+            for(int j = 0; j < FILES; j++){
+                if(j == current_output) {
+                    merg[j] = -1;
+                }
+                else {
+                    read_files[j].read((char *) &toRestore, sizeof(toRestore));
+                    merg[j] = toRestore;
+                }
+            }
+            while (find_min() >= 0) {
+                for(int l = 0; l < FILES; l++)
+                    cout << merg[l] << " ";
+                cout << endl;
+                curr = find_min();
+                value = merg[curr];
+                    cout << value << endl;
+                write_files[current_output].write((char *) &value, sizeof(value));
+                read_files[curr].read((char *) &toRestore, sizeof(toRestore));
+                merg[curr] = toRestore;
+            }
+            int br = -1;
+            write_files[current_output].write((char *) &br, sizeof(br));
         }
+        close_files(current_output);
     }
 }
 
