@@ -27,8 +27,8 @@ void check_arrays(int count, int arr_of_bolts[], int arr_of_nuts[]){
     cout << endl;
     cout << "=============\n";
 }
-int find_pos_of_el(int data, int count, int arr[]){
-    for (int i = 0; i < count; i++){
+int find_pos_of_el(int data, int low, int high, int arr[]){
+    for (int i = low; i <= high; i++){
         if (arr[i] == data)
             return i;
     }
@@ -37,23 +37,38 @@ int find_pos_of_el(int data, int count, int arr[]){
 void quicksort_for_two(int bolts[], int nuts[], int low, int high, int count){
     int i = low;
     int j = high;
-    int pivot = nuts[find_pos_of_el(bolts[(i+j)/2], count, nuts)];
+    int pivot = nuts[find_pos_of_el(bolts[(i+j)/2], low, high, nuts)];
 
-    while (i <= j){
+    while (i <= j) {
         while (bolts[i] < pivot)
             i++;
         while (bolts[j] > pivot)
             j--;
-        if (i <= j){
+        if (i <= j) {
             std::swap(bolts[i], bolts[j]);
             i++;
             j--;
         }
+    }
+    
+        i = low;
+        j = high;
+        pivot = bolts[find_pos_of_el(nuts[(i+j)/2], low, high, bolts)];
+    while (i <= j) {
+        while (nuts[i] < pivot)
+            i++;
+        while (nuts[j] > pivot)
+            j--;
+        if (i <= j) {
+            std::swap(nuts[i], nuts[j]);
+            i++;
+            j--;
+        }
+    }
         if (j > low)
             quicksort_for_two(bolts, nuts, low, j, count);
         if (i < high)
             quicksort_for_two(bolts, nuts, i, high, count);
-    }
 }
 
 
@@ -65,7 +80,6 @@ int main() {
     int nuts[count];
     fill_arrays(count, bolts, nuts);
     quicksort_for_two(bolts, nuts, 0, count-1, count);
-    quicksort_for_two(nuts, bolts, 0, count-1, count);
     check_arrays(count, bolts, nuts);
     return 0;
 }
