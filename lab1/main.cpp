@@ -15,8 +15,8 @@ using std::ofstream;
 using std::ifstream;
 using std::ios;
 
-int const COUNT = 1000;
-int const SIZE = 100;
+int const COUNT = 4000000;
+int const SIZE = 200;
 int const FILES = 7; // less than 10 plz
 
 int fib[1000000][FILES] = {0};
@@ -127,8 +127,8 @@ int share_data_fibonachi() {
     int FIELDS = sum_fib(i);
     int RECORDS = (COUNT / FIELDS) + 1;
     int position = i;
-    cout << "count of fields:" << FIELDS << endl;
-    cout << "count of elem in one field:" << RECORDS << endl;
+   // cout << "count of fields:" << FIELDS << endl;
+   // cout << "count of elem in one field:" << RECORDS << endl;
 
 
     string filename;
@@ -172,10 +172,10 @@ int share_data_fibonachi() {
             quickSort(arr, 0, j - 1);
 
             for (int i = 0; i < j - 1; i++) {
-//                cout << arr[i] << " ";
+//               // cout << arr[i] << " ";
                 write_files[l].write((char *) &arr[i], sizeof(arr[i]));
             }
-//            cout << endl;
+//           // cout << endl;
             int br = -1;
             write_files[l].write((char *) &br, sizeof(br));
         }
@@ -238,7 +238,7 @@ int find_count_merges_fib(int pos) {
             mini = fib[pos][i];
         }
     }
-    cout << mini << endl;
+   // cout << mini << endl;
     return mini;
 }
 
@@ -265,11 +265,11 @@ void merge_files(int position) {
             }
             while (find_min() >= 0) {
                 for(int l = 0; l < FILES; l++)
-                    cout << merg[l] << " ";
-                cout << endl;
+                   // cout << merg[l] << " ";
+               // cout << endl;
                 curr = find_min();
                 value = merg[curr];
-                    cout << value << endl;
+               // cout << value << endl;
                 write_files[current_output].write((char *) &value, sizeof(value));
                 read_files[curr].read((char *) &toRestore, sizeof(toRestore));
                 merg[curr] = toRestore;

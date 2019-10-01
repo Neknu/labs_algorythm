@@ -12,10 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465cc6db-cfed-41bc-a8dc-7b211dc43d76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab1.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab1.dir/main.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab1.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab1.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lab1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lab1.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab1.dir/main.cpp.obj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -36,50 +33,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="271" selection-start-line="271" selection-end-line="273" selection-end-column="17" />
+            <state relative-caret-position="-4185">
+              <caret line="77" column="20" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data2.bin">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data1.bin">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data0.bin">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data3.bin">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data6.bin">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-186" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data5.bin">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmake-build-debug/data4.bin">
-          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -100,7 +60,11 @@
       <find>ofst</find>
       <find>read_</find>
       <find>cout</find>
+      <find>cout</find>
     </findStrings>
+    <replaceStrings>
+      <replace>// cout</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -200,23 +164,22 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19234000" />
+    <option name="totallyTimeSpent" value="22924000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="36" width="1550" height="835" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.18926175" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
-      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50067115" side_tool="true" weight="0.32859176" />
       <window_info anchor="bottom" id="Database Changes" order="3" />
-      <window_info anchor="bottom" id="Messages" order="4" weight="0.32859176" />
+      <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.49932885" weight="0.32859176" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.32859176" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.16358463" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.49932885" weight="0.2631579" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.3997155" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="CMake" order="10" />
@@ -260,16 +223,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/input.txt" />
     <entry file="file://$PROJECT_DIR$/example.txt" />
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/A.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/B.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6776">
-          <caret column="308640" selection-start-column="308640" selection-end-column="308640" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/A.txt" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/B.txt" />
     <entry file="file://$PROJECT_DIR$/cmake-build-debug/input.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="403">
@@ -280,9 +235,7 @@
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/example.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/example.txt" />
     <entry file="file://$PROJECT_DIR$/cmake-build-debug/example.bin">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -299,24 +252,14 @@
     <entry file="file://$PROJECT_DIR$/cmake-build-debug/data2.bin">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data3.bin">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data4.bin">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data5.bin">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data6.bin">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-186" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data3.bin" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data4.bin" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data5.bin" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/data6.bin" />
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="271" selection-start-line="271" selection-end-line="273" selection-end-column="17" />
+        <state relative-caret-position="-4185">
+          <caret line="77" column="20" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
