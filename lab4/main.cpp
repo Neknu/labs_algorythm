@@ -32,6 +32,7 @@ public:
         key = k;
         value = v;
     }
+
 };
 
 class Array{
@@ -52,7 +53,25 @@ public:
     }
 
     void TwoArraySort() {
+        Array* zero = new Array();
+        Array* one = new Array();
 
+        for(int i = 0; i < size; i++) {
+            if(arr[i].key == 0) {
+                zero->arr[zero->size] = arr[i];
+                zero->size++;
+            }
+            else
+            if(arr[i].key == 1) {
+                one->arr[one->size] = arr[i];
+                one->size++;
+            }
+        }
+        for(int i = 0; i < zero->size; i++)
+            arr[i] = zero->arr[i];
+
+        for(int i = 0; i < one->size; i++)
+            arr[zero->size + i] = one->arr[i];
     }
 
     void TwoSideSort() {
