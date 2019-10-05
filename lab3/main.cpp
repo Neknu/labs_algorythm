@@ -102,7 +102,10 @@ int main()
     const int capacity = 100;
     int arr[capacity] = {4, 5, 6, 7, 8, 9, 10};
     int n = 7;
-    int k = 3;
+//    int arr[100];
+//    for(int i = 0; i < n; i++)
+//        arr[i] =
+    int k = 3; // count of sons
 
     buildHeap(arr, n, k);
 
@@ -116,7 +119,7 @@ int main()
     for (int i=0; i<n; i++)
         printf("%d ", arr[i]);
 
-    int element = 3;
+    int element = 100;
     insert(arr, &n, k, element);
 
     printf("\n\nHeap after insertion of %d: \n",
