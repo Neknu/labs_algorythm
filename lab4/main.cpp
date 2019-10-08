@@ -16,8 +16,7 @@ int rand_num(double max) {
 using std::cin;
 using std::cout;
 using std::endl;
-
-const int MAXN = 1000000;
+using std::vector;
 
 class Field{
 public:
@@ -37,7 +36,7 @@ public:
 
 class Array{
 private:
-    Field arr[MAXN];
+    vector<Field> arr;
     int size;
 
 public:
@@ -45,9 +44,9 @@ public:
         size = 0;
     }
 
-    Array(int N) {
+    Array(int N){
         for(int i = 0; i < N; i++) {
-            arr[i] = Field(rand_num(2), i);
+            arr.push_back(Field(rand_num(2), i));
         }
         size = N;
     }
@@ -58,15 +57,16 @@ public:
 
         for(int i = 0; i < size; i++) {
             if(arr[i].key == 0) {
-                zero->arr[zero->size] = arr[i];
+                zero->arr.push_back(arr[i]);
                 zero->size++;
             }
             else
             if(arr[i].key == 1) {
-                one->arr[one->size] = arr[i];
+                one->arr.push_back(arr[i]);
                 one->size++;
             }
         }
+        arr.clear();
         for(int i = 0; i < zero->size; i++)
             arr[i] = zero->arr[i];
 
@@ -108,19 +108,20 @@ public:
 };
 
 int main() {
-//    Array* A = new Array(1000);
+
+    Array* A = new Array(100);
+    A->print();
+    A->TwoArraySort();
+    A->print();
+//
+//    Array* A = new Array(100);
 //    A->print();
 //    A->TwoSideSort();
 //    A->print();
 //
-//    Array* A = new Array(1000);
+//    Array* A = new Array(100);
 //    A->print();
 //    A->BubbleSort();
 //    A->print();
-
-    Array* A = new Array(1000);
-    A->print();
-    A->TwoArraySort();
-    A->print();
     return 0;
 }
