@@ -10,7 +10,7 @@
 #include <chrono>
 
 int const RAND = 10;
-int const SIZE = 4;
+int const SIZE = 128;
 using std::vector;
 
 int rand_num(int max) ;
