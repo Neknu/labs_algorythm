@@ -91,7 +91,7 @@ Matrix Matrix::StrassenMultiply(Matrix another) {
 }
 
 Matrix Matrix::StrassenMultiplyRekurs(Matrix A, Matrix B) {
-    if(A.size < SIZE)
+    if(A.size <= SIZE)
         return A*B;
     Matrix A11(A, A.size / 2, 0, 0);
     Matrix A12(A, A.size / 2, 0, A.size / 2);
