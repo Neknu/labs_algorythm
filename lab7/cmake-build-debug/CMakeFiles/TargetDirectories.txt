@@ -1,0 +1,3 @@
+D:/University/labs_algorythm/lab7/cmake-build-debug/CMakeFiles/lab7.dir
+D:/University/labs_algorythm/lab7/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/University/labs_algorythm/lab7/cmake-build-debug/CMakeFiles/rebuild_cache.dir
