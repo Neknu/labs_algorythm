@@ -3,11 +3,12 @@ using namespace std;
 
 // d is the number of characters in the input alphabet  
 #define d 256
+#define q 101
 
-void search(char pat[], char txt[], int q)
+int search(const string& pat, const string& txt)
 {
-    int M = strlen(pat);
-    int N = strlen(txt);
+    int M = pat.length();
+    int N = txt.length();
     int i, j;
     int hash_pattern= 0;
     int hash_text = 0;
@@ -35,7 +36,7 @@ void search(char pat[], char txt[], int q)
             }
 
             if (j == M)
-                cout<<"Pattern found at index "<< i <<endl;
+                return i;
         }
 
         if ( i < N-M )
@@ -46,13 +47,76 @@ void search(char pat[], char txt[], int q)
                 hash_text = (hash_text + q);
         }
     }
+    return -1;
+}
+
+std::pair<int,int> search_in_matrices(string pattern[], string text[])
+{
+    int index;
+
+    for (int i = 0; i < (int) text[0].length(); ++i)
+    {
+        if (text[0].length() - i < pattern[0].length())
+        {
+            return std::make_pair(-1,-1);;
+        }
+
+        index = search(pattern[0], text[i]);
+
+        while (index >= 0)
+        {
+            int counter = 1;
+
+            for (int j = i + 1; j < (int) text[0].length(); j++)
+            {
+                if (pattern[counter] == text[j].substr(index, pattern[0].length()))
+                {
+                    counter++;
+                } else {
+                    break;
+                }
+
+                if (counter == pattern[0].length())
+                {
+                    return std::make_pair(i,index);
+                }
+            }
+
+            index = search(pattern[0], text[i].substr(index + 1, text[0].length() - index - 1));
+        }
+    }
+    return std::make_pair(-1,-1);
 }
 
 int main()
 {
-    char txt[] = "GEEKS FOR GEEKS";
-    char pat[] = "GEEK";
-    int q = 101;
-    search(pat, txt, q);
+
+    int N;
+    int M;
+
+    cout << "Enter N (size of text array NxN)" << endl;
+    cin >> N;
+    cout << "Enter M (size of pattern array MxM)" << endl;
+    cin >> M;
+
+    auto *text = new string[N];
+    auto *pattern = new string[M];
+
+    cout << "Enter an text array NxN" << endl;
+    for (int i = 0; i < N; ++i)
+    {
+        cin >> text[i];
+    }
+
+    cout << "Enter an pattern array MxM" << endl;
+    for (int i = 0; i < M; ++i)
+    {
+        cin >> pattern[i];
+    }
+
+    std::pair<int,int> result = search_in_matrices(pattern, text);
+
+    cout << "Finded on " << "i: " << result.first << " j: " << result.second;
+
     return 0;
 }  
