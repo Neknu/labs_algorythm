@@ -135,6 +135,7 @@ void print_products(const vector<Product*> &products) {
     for(auto product:products) {
         print_product(product);
     }
+    cout << endl;
 }
 
 int main() {
@@ -142,9 +143,12 @@ int main() {
     products = collect_data();
     print_products(products);
     vector<Node*> hash = create_hash(products);
-    cout << "Now please write what product you want " << endl;
+    cout << "Now please write what product you want: " << endl;
+    cout << "(please write only existing product, or error or incomplete data arise)" << endl;
     string product_name;
     cin >> product_name;
+
     print_product(getProductByName(hash, product_name));
+
     return 0;
 }
