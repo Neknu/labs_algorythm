@@ -7,15 +7,18 @@ enum COLOR { RED, BLACK };
 class Node {
 public:
   int val;
+  int size; // size of subtree including root
   COLOR color;
-  Node *left, *right, *parent;
+  Node* left, *right, *parent;
 
-  explicit Node(int val) : val(val) {
+  explicit Node(int val) {
+    this->val = val;
+    size = 1;
     parent = left = right = nullptr;
     color = RED;
   }
 
-  Node *uncle() {
+  Node* uncle() {
     if (parent == nullptr or parent->parent == nullptr)
       return nullptr;
 
@@ -27,7 +30,7 @@ public:
 
   bool isOnLeft() { return this == parent->left; }
 
-  Node *sibling() {
+  Node* sibling() {
     if (parent == nullptr)
       return nullptr;
 
@@ -38,7 +41,7 @@ public:
   }
 
   // moves node down and moves given node in its place
-  void moveDown(Node *nParent) {
+  void moveDown(Node* nParent) {
     if (parent != nullptr) {
       if (isOnLeft()) {
         parent->left = nParent;
@@ -57,15 +60,16 @@ public:
 };
 
 class RBTree {
-  Node *root;
+  Node* root;
 
 
-  void leftRotate(Node *x) {
-    Node *nParent = x->right;
+  void leftRotate(Node* x) {
+    Node* nParent = x->right;
 
     if (x == root)
       root = nParent;
 
+    nParent->size = x->size;
     x->moveDown(nParent);
 
     x->right = nParent->left;
@@ -73,14 +77,17 @@ class RBTree {
       nParent->left->parent = x;
 
     nParent->left = x;
+    x->size = x->left->size + x->right->size + 1;
+
   }
 
-  void rightRotate(Node *x) {
-    Node *nParent = x->left;
+  void rightRotate(Node* x) {
+    Node* nParent = x->left;
 
     if (x == root)
       root = nParent;
 
+    nParent->size = x->size;
     x->moveDown(nParent);
 
     x->left = nParent->right;
@@ -88,29 +95,30 @@ class RBTree {
       nParent->right->parent = x;
 
     nParent->right = x;
+    x->size = x->left->size + x->right->size + 1;
   }
 
-  static void swapColors(Node *x1, Node *x2) {
+  static void swapColors(Node* x1, Node* x2) {
     COLOR temp;
     temp = x1->color;
     x1->color = x2->color;
     x2->color = temp;
   }
 
-  static void swapValues(Node *u, Node *v) {
+  static void swapValues(Node* u, Node* v) {
     int temp;
     temp = u->val;
     u->val = v->val;
     v->val = temp;
   }
 
-  void fixRedRed(Node *x) {
+  void fixRedRed(Node* x) {
     if (x == root) {
       x->color = BLACK;
       return;
     }
 
-    Node *parent = x->parent, *grandparent = parent->parent,
+    Node* parent = x->parent, *grandparent = parent->parent,
          *uncle = x->uncle();
 
     if (parent->color != BLACK) {
@@ -148,10 +156,32 @@ class RBTree {
     }
   }
 
+  void fixSizeInc(Node* x) {
+      if(x == root)
+          return;
+      Node* curr = x->parent;
+      while(curr != root) {
+          curr->size++;
+          curr = curr->parent;
+      }
+      root->size++;
+  }
+
+    void fixSizeDec(Node* x) {
+        if(x == root)
+            return;
+        Node* curr = x->parent;
+        while(curr != root) {
+            curr->size--;
+            curr = curr->parent;
+        }
+        root->size--;
+    }
+
   // find node that do not have a left child
   // in the subtree of the given node
-  static Node *successor(Node *x) {
-    Node *temp = x;
+  static Node* successor(Node* x) {
+    Node* temp = x;
 
     while (temp->left != nullptr)
       temp = temp->left;
@@ -160,7 +190,7 @@ class RBTree {
   }
 
   // find node that replaces a deleted node in BST
-  static Node *BSTreplace(Node *x) {
+  static Node* BSTreplace(Node* x) {
     // when node have 2 children
     if (x->left != nullptr and x->right != nullptr)
       return successor(x->right);
@@ -176,11 +206,12 @@ class RBTree {
       return x->right;
   }
 
-  void deleteNode(Node *v) {
-    Node *u = BSTreplace(v);
+  void deleteNode(Node* v) {
+    fixSizeDec(v);
+    Node* u = BSTreplace(v);
 
     bool uvBlack = ((u == nullptr or u->color == BLACK) and (v->color == BLACK));
-    Node *parent = v->parent;
+    Node* parent = v->parent;
     if (u == nullptr) {
       // u is nullptr therefore v is leaf
       if (v == root) {
@@ -241,11 +272,11 @@ class RBTree {
     deleteNode(u);
   }
 
-  void fixDoubleBlack(Node *x) {
+  void fixDoubleBlack(Node* x) {
     if (x == root)
       return;
 
-    Node *sibling = x->sibling(), *parent = x->parent;
+    Node* sibling = x->sibling(), *parent = x->parent;
     if (sibling == nullptr) {
       // No sibiling, double black pushed up
       fixDoubleBlack(parent);
@@ -300,12 +331,12 @@ class RBTree {
     }
   }
 
-  static void levelOrder(Node *x) {
+  static void levelOrder(Node* x) {
     if (x == nullptr)
       return;
 
-    queue<Node *> q;
-    Node *curr;
+    queue<Node* > q;
+    Node* curr;
 
     q.push(x);
 
@@ -322,7 +353,7 @@ class RBTree {
     }
   }
 
-  static void inorder(Node *x) {
+  static void inorder(Node* x) {
     if (x == nullptr)
       return;
     inorder(x->left);
@@ -334,13 +365,13 @@ public:
 
   RBTree() { root = nullptr; }
 
-  Node *getRoot() { return root; }
+  Node* getRoot() { return root; }
 
   // searches for given value
   // if found returns the node (used for delete)
   // else returns the last node while traversing (used in insert)
-  Node *search(int n) {
-    Node *temp = root;
+  Node* search(int n) {
+    Node* temp = root;
     while (temp != nullptr) {
       if (n < temp->val) {
         if (temp->left == nullptr)
@@ -362,12 +393,12 @@ public:
 
 
   void insert(int n) {
-    Node *newNode = new Node(n);
+    Node* newNode = new Node(n);
     if (root == nullptr) {
       newNode->color = BLACK;
       root = newNode;
     } else {
-      Node *temp = search(n);
+      Node* temp = search(n);
 
       if (temp->val == n) {
         return;
@@ -384,6 +415,9 @@ public:
       else
         temp->right = newNode;
 
+      // fix size for all newNode's parents
+      fixSizeInc(newNode);
+
       // fix red red voilaton if exists
       fixRedRed(newNode);
     }
@@ -395,7 +429,7 @@ public:
       // Tree is empty
       return;
 
-    Node *v = search(n), *u;
+    Node* v = search(n), *u;
 
     if (v->val != n) {
       cout << "No node found to delete with value:" << n << endl;
@@ -403,6 +437,33 @@ public:
     }
 
     deleteNode(v);
+  }
+
+  static Node* OSSelectRekurisve(Node* x, int key) {
+      int r = x->left->size + 1;
+      if(key == r) {
+          return x;
+      } else if(key < r) {
+          return OSSelectRekurisve(x->left, key);
+      } else {
+          return OSSelectRekurisve(x->right, key - r);
+      }
+  }
+
+  Node* OSSelect(int key) {
+      return OSSelectRekurisve(root, key);
+  }
+
+  int OSRank(Node* x) {
+      int r = x->left->size + 1;
+      Node* y = x;
+      while(y != root) {
+          if(y == y->parent->right) {
+              r += y->parent->left->size + 1;
+          }
+          y = y->parent;
+      }
+      return r;
   }
 
   void printInOrder() {
