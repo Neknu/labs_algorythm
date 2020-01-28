@@ -10,34 +10,24 @@ public:
   COLOR color;
   Node *left, *right, *parent;
 
-  Node(int val) : val(val) {
+  explicit Node(int val) : val(val) {
     parent = left = right = nullptr;
-
-    // Node is created during insertion
-    // Node is red at insertion
     color = RED;
   }
 
-  // returns pointer to uncle
   Node *uncle() {
-    // If no parent or grandparent, then no uncle
     if (parent == nullptr or parent->parent == nullptr)
       return nullptr;
 
     if (parent->isOnLeft())
-      // uncle on right
       return parent->parent->right;
     else
-      // uncle on left
       return parent->parent->left;
   }
 
-  // check if node is left child of parent
   bool isOnLeft() { return this == parent->left; }
 
-  // returns pointer to sibling
   Node *sibling() {
-    // sibling nullptr if no parent
     if (parent == nullptr)
       return nullptr;
 
@@ -69,46 +59,34 @@ public:
 class RBTree {
   Node *root;
 
-  // left rotates the given node
+
   void leftRotate(Node *x) {
-    // new parent will be node's right child
     Node *nParent = x->right;
 
-    // update root if current node is root
     if (x == root)
       root = nParent;
 
     x->moveDown(nParent);
 
-    // connect x with new parent's left element
     x->right = nParent->left;
-    // connect new parent's left element with node
-    // if it is not nullptr
     if (nParent->left != nullptr)
       nParent->left->parent = x;
 
-    // connect new parent with x
     nParent->left = x;
   }
 
   void rightRotate(Node *x) {
-    // new parent will be node's left child
     Node *nParent = x->left;
 
-    // update root if current node is root
     if (x == root)
       root = nParent;
 
     x->moveDown(nParent);
 
-    // connect x with new parent's right element
     x->left = nParent->right;
-    // connect new parent's right element with node
-    // if it is not nullptr
     if (nParent->right != nullptr)
       nParent->right->parent = x;
 
-    // connect new parent with x
     nParent->right = x;
   }
 
@@ -126,15 +104,12 @@ class RBTree {
     v->val = temp;
   }
 
-  // fix red red at given node
   void fixRedRed(Node *x) {
-    // if x is root color it black and return
     if (x == root) {
       x->color = BLACK;
       return;
     }
 
-    // initialize parent, grandparent, uncle
     Node *parent = x->parent, *grandparent = parent->parent,
          *uncle = x->uncle();
 
@@ -201,11 +176,9 @@ class RBTree {
       return x->right;
   }
 
-  // deletes the given node
   void deleteNode(Node *v) {
     Node *u = BSTreplace(v);
 
-    // True when u and v are both black
     bool uvBlack = ((u == nullptr or u->color == BLACK) and (v->color == BLACK));
     Node *parent = v->parent;
     if (u == nullptr) {
@@ -270,7 +243,6 @@ class RBTree {
 
   void fixDoubleBlack(Node *x) {
     if (x == root)
-      // Reached root
       return;
 
     Node *sibling = x->sibling(), *parent = x->parent;
@@ -279,19 +251,15 @@ class RBTree {
       fixDoubleBlack(parent);
     } else {
       if (sibling->color == RED) {
-        // Sibling red
         parent->color = RED;
         sibling->color = BLACK;
         if (sibling->isOnLeft()) {
-          // left case
           rightRotate(parent);
         } else {
-          // right case
           leftRotate(parent);
         }
         fixDoubleBlack(x);
       } else {
-        // Sibling black
         if (sibling->hasRedChild()) {
           // at least 1 red children
           if (sibling->left != nullptr and sibling->left->color == RED) {
@@ -332,29 +300,21 @@ class RBTree {
     }
   }
 
-  // prints level order for given node
   static void levelOrder(Node *x) {
     if (x == nullptr)
-      // return if node is nullptr
       return;
 
-    // queue for level order
     queue<Node *> q;
     Node *curr;
 
-    // push x
     q.push(x);
 
     while (!q.empty()) {
-      // while q is not empty
-      // dequeue
       curr = q.front();
       q.pop();
 
-      // print node value
       cout << curr->val << " ";
 
-      // push children to queue
       if (curr->left != nullptr)
         q.push(curr->left);
       if (curr->right != nullptr)
@@ -362,7 +322,6 @@ class RBTree {
     }
   }
 
-  // prints inorder recursively
   static void inorder(Node *x) {
     if (x == nullptr)
       return;
@@ -372,8 +331,7 @@ class RBTree {
   }
 
 public:
-  // constructor
-  // initialize root
+
   RBTree() { root = nullptr; }
 
   Node *getRoot() { return root; }
@@ -402,19 +360,16 @@ public:
     return temp;
   }
 
-  // inserts the given value to tree
+
   void insert(int n) {
     Node *newNode = new Node(n);
     if (root == nullptr) {
-      // when root is nullptr
-      // simply insert value at root
       newNode->color = BLACK;
       root = newNode;
     } else {
       Node *temp = search(n);
 
       if (temp->val == n) {
-        // return if value already exists
         return;
       }
 
@@ -450,7 +405,6 @@ public:
     deleteNode(v);
   }
 
-  // prints inorder of the tree
   void printInOrder() {
     cout << "Inorder: " << endl;
     if (root == nullptr)
@@ -460,7 +414,6 @@ public:
     cout << endl;
   }
 
-  // prints level order of the tree
   void printLevelOrder() {
     cout << "Level order: " << endl;
     if (root == nullptr)
