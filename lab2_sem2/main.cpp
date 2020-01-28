@@ -357,7 +357,7 @@ class RBTree {
     if (x == nullptr)
       return;
     inorder(x->left);
-    cout << x->val << " ";
+    cout << x->val << " " << x->size << endl;
     inorder(x->right);
   }
 
@@ -513,5 +513,6 @@ int main() {
 
   tree.printInOrder();
   tree.printLevelOrder();
+
   return 0;
 }
