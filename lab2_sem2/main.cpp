@@ -11,7 +11,7 @@ public:
   Node *left, *right, *parent;
 
   Node(int val) : val(val) {
-    parent = left = right = NULL;
+    parent = left = right = nullptr;
 
     // Node is created during insertion
     // Node is red at insertion
@@ -21,8 +21,8 @@ public:
   // returns pointer to uncle
   Node *uncle() {
     // If no parent or grandparent, then no uncle
-    if (parent == NULL or parent->parent == NULL)
-      return NULL;
+    if (parent == nullptr or parent->parent == nullptr)
+      return nullptr;
 
     if (parent->isOnLeft())
       // uncle on right
@@ -37,9 +37,9 @@ public:
 
   // returns pointer to sibling
   Node *sibling() {
-    // sibling null if no parent
-    if (parent == NULL)
-      return NULL;
+    // sibling nullptr if no parent
+    if (parent == nullptr)
+      return nullptr;
 
     if (isOnLeft())
       return parent->right;
@@ -49,7 +49,7 @@ public:
 
   // moves node down and moves given node in its place
   void moveDown(Node *nParent) {
-    if (parent != NULL) {
+    if (parent != nullptr) {
       if (isOnLeft()) {
         parent->left = nParent;
       } else {
@@ -61,8 +61,8 @@ public:
   }
 
   bool hasRedChild() {
-    return (left != NULL and left->color == RED) or
-           (right != NULL and right->color == RED);
+    return (left != nullptr and left->color == RED) or
+           (right != nullptr and right->color == RED);
   }
 };
 
@@ -83,8 +83,8 @@ class RBTree {
     // connect x with new parent's left element
     x->right = nParent->left;
     // connect new parent's left element with node
-    // if it is not null
-    if (nParent->left != NULL)
+    // if it is not nullptr
+    if (nParent->left != nullptr)
       nParent->left->parent = x;
 
     // connect new parent with x
@@ -104,22 +104,22 @@ class RBTree {
     // connect x with new parent's right element
     x->left = nParent->right;
     // connect new parent's right element with node
-    // if it is not null
-    if (nParent->right != NULL)
+    // if it is not nullptr
+    if (nParent->right != nullptr)
       nParent->right->parent = x;
 
     // connect new parent with x
     nParent->right = x;
   }
 
-  void swapColors(Node *x1, Node *x2) {
+  static void swapColors(Node *x1, Node *x2) {
     COLOR temp;
     temp = x1->color;
     x1->color = x2->color;
     x2->color = temp;
   }
 
-  void swapValues(Node *u, Node *v) {
+  static void swapValues(Node *u, Node *v) {
     int temp;
     temp = u->val;
     u->val = v->val;
@@ -139,7 +139,7 @@ class RBTree {
          *uncle = x->uncle();
 
     if (parent->color != BLACK) {
-      if (uncle != NULL && uncle->color == RED) {
+      if (uncle != nullptr && uncle->color == RED) {
         // uncle red, perform recoloring and recurse
         parent->color = BLACK;
         uncle->color = BLACK;
@@ -175,27 +175,27 @@ class RBTree {
 
   // find node that do not have a left child
   // in the subtree of the given node
-  Node *successor(Node *x) {
+  static Node *successor(Node *x) {
     Node *temp = x;
 
-    while (temp->left != NULL)
+    while (temp->left != nullptr)
       temp = temp->left;
 
     return temp;
   }
 
   // find node that replaces a deleted node in BST
-  Node *BSTreplace(Node *x) {
+  static Node *BSTreplace(Node *x) {
     // when node have 2 children
-    if (x->left != NULL and x->right != NULL)
+    if (x->left != nullptr and x->right != nullptr)
       return successor(x->right);
 
     // when leaf
-    if (x->left == NULL and x->right == NULL)
-      return NULL;
+    if (x->left == nullptr and x->right == nullptr)
+      return nullptr;
 
     // when single child
-    if (x->left != NULL)
+    if (x->left != nullptr)
       return x->left;
     else
       return x->right;
@@ -206,14 +206,13 @@ class RBTree {
     Node *u = BSTreplace(v);
 
     // True when u and v are both black
-    bool uvBlack = ((u == NULL or u->color == BLACK) and (v->color == BLACK));
+    bool uvBlack = ((u == nullptr or u->color == BLACK) and (v->color == BLACK));
     Node *parent = v->parent;
-
-    if (u == NULL) {
-      // u is NULL therefore v is leaf
+    if (u == nullptr) {
+      // u is nullptr therefore v is leaf
       if (v == root) {
-        // v is root, making root null
-        root = NULL;
+        // v is root, making root nullptr
+        root = nullptr;
       } else {
         if (uvBlack) {
           // u and v both black
@@ -221,28 +220,28 @@ class RBTree {
           fixDoubleBlack(v);
         } else {
           // u or v is red
-          if (v->sibling() != NULL)
-            // sibling is not null, make it red"
+          if (v->sibling() != nullptr)
+            // sibling is not nullptr, make it red"
             v->sibling()->color = RED;
         }
 
         // delete v from the tree
         if (v->isOnLeft()) {
-          parent->left = NULL;
+          parent->left = nullptr;
         } else {
-          parent->right = NULL;
+          parent->right = nullptr;
         }
       }
       delete v;
       return;
     }
 
-    if (v->left == NULL or v->right == NULL) {
+    if (v->left == nullptr or v->right == nullptr) {
       // v has 1 child
       if (v == root) {
         // v is root, assign the value of u to v, and delete u
         v->val = u->val;
-        v->left = v->right = NULL;
+        v->left = v->right = nullptr;
         delete u;
       } else {
         // Detach v from tree and move u up
@@ -275,7 +274,7 @@ class RBTree {
       return;
 
     Node *sibling = x->sibling(), *parent = x->parent;
-    if (sibling == NULL) {
+    if (sibling == nullptr) {
       // No sibiling, double black pushed up
       fixDoubleBlack(parent);
     } else {
@@ -295,7 +294,7 @@ class RBTree {
         // Sibling black
         if (sibling->hasRedChild()) {
           // at least 1 red children
-          if (sibling->left != NULL and sibling->left->color == RED) {
+          if (sibling->left != nullptr and sibling->left->color == RED) {
             if (sibling->isOnLeft()) {
               // left left
               sibling->left->color = sibling->color;
@@ -334,9 +333,9 @@ class RBTree {
   }
 
   // prints level order for given node
-  void levelOrder(Node *x) {
-    if (x == NULL)
-      // return if node is null
+  static void levelOrder(Node *x) {
+    if (x == nullptr)
+      // return if node is nullptr
       return;
 
     // queue for level order
@@ -356,16 +355,16 @@ class RBTree {
       cout << curr->val << " ";
 
       // push children to queue
-      if (curr->left != NULL)
+      if (curr->left != nullptr)
         q.push(curr->left);
-      if (curr->right != NULL)
+      if (curr->right != nullptr)
         q.push(curr->right);
     }
   }
 
   // prints inorder recursively
-  void inorder(Node *x) {
-    if (x == NULL)
+  static void inorder(Node *x) {
+    if (x == nullptr)
       return;
     inorder(x->left);
     cout << x->val << " ";
@@ -375,7 +374,7 @@ class RBTree {
 public:
   // constructor
   // initialize root
-  RBTree() { root = NULL; }
+  RBTree() { root = nullptr; }
 
   Node *getRoot() { return root; }
 
@@ -384,16 +383,16 @@ public:
   // else returns the last node while traversing (used in insert)
   Node *search(int n) {
     Node *temp = root;
-    while (temp != NULL) {
+    while (temp != nullptr) {
       if (n < temp->val) {
-        if (temp->left == NULL)
+        if (temp->left == nullptr)
           break;
         else
           temp = temp->left;
       } else if (n == temp->val) {
         break;
       } else {
-        if (temp->right == NULL)
+        if (temp->right == nullptr)
           break;
         else
           temp = temp->right;
@@ -406,8 +405,8 @@ public:
   // inserts the given value to tree
   void insert(int n) {
     Node *newNode = new Node(n);
-    if (root == NULL) {
-      // when root is null
+    if (root == nullptr) {
+      // when root is nullptr
       // simply insert value at root
       newNode->color = BLACK;
       root = newNode;
@@ -437,7 +436,7 @@ public:
 
   // utility function that deletes the node with given value
   void deleteByVal(int n) {
-    if (root == NULL)
+    if (root == nullptr)
       // Tree is empty
       return;
 
@@ -454,7 +453,7 @@ public:
   // prints inorder of the tree
   void printInOrder() {
     cout << "Inorder: " << endl;
-    if (root == NULL)
+    if (root == nullptr)
       cout << "Tree is empty" << endl;
     else
       inorder(root);
@@ -464,7 +463,7 @@ public:
   // prints level order of the tree
   void printLevelOrder() {
     cout << "Level order: " << endl;
-    if (root == NULL)
+    if (root == nullptr)
       cout << "Tree is empty" << endl;
     else
       levelOrder(root);
