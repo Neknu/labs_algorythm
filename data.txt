@@ -16,3 +16,9 @@ vegetables
 carrot
 vegetables
 10
+cherry
+berry
+16
+strawberry
+berry
+25
