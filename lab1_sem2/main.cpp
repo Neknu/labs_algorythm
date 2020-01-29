@@ -43,7 +43,7 @@ struct Node {
 vector<Product*> collect_data() {
     vector<Product*> products;
     ifstream f;
-    f.open("data.txt");
+    f.open("../../data.txt");
     string data;
     while(f >> data) {
         auto product = new Product();
