@@ -1,6 +1,45 @@
 #include <iostream>
 #include <queue>
+#include <fstream>
+#include <vector>
 using namespace std;
+
+struct Product {
+    string name;
+    string group;
+    int cost;
+};
+
+vector<Product*> collect_data() {
+    vector<Product*> products;
+    ifstream f;
+    f.open("../../data.txt");
+    string data;
+    while(f >> data) {
+        auto product = new Product();
+        product->name = data;
+        f >> data;
+        product->group = data;
+        f >> data;
+        product->cost = std::stoi(data);
+        products.push_back(product);
+    }
+    f.close();
+    return products;
+}
+
+void print_product(Product* product) {
+    cout << "name: " << product->name << " -- group: " << product->group << " -- cost: " << product->cost << endl;
+}
+
+void print_products(const vector<Product*> &products) {
+    cout << "WELCOME TO OUR MINIMARKET HASH:" << endl;
+    cout << "You can choose your product name:" << endl;
+    for(auto product:products) {
+        print_product(product);
+    }
+    cout << endl;
+}
 
 enum COLOR { RED, BLACK };
 
@@ -513,6 +552,11 @@ int main() {
 
   tree.printInOrder();
   tree.printLevelOrder();
+
+  vector<Product*> products;
+  products = collect_data();
+
+  print_products(products);
 
   return 0;
 }
