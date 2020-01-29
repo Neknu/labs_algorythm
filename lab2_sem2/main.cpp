@@ -2,6 +2,7 @@
 #include <queue>
 #include <fstream>
 #include <vector>
+#include <string>
 using namespace std;
 
 struct Product {
@@ -45,12 +46,12 @@ enum COLOR { RED, BLACK };
 
 class Node {
 public:
-  int val;
+  Product val;
   int size; // size of subtree including root
   COLOR color;
   Node* left, *right, *parent;
 
-  explicit Node(int val) {
+  explicit Node(Product val) {
     this->val = val;
     size = 1;
     parent = left = right = nullptr;
@@ -116,7 +117,15 @@ class RBTree {
       nParent->left->parent = x;
 
     nParent->left = x;
-    x->size = x->left->size + x->right->size + 1;
+    int left_size = 0;
+    int right_size = 0;
+    if(x->left != nullptr) {
+      left_size = x->left->size;
+    }
+    if(x->right != nullptr) {
+      right_size = x->right->size;
+    }
+    x->size = right_size + left_size + 1;
 
   }
 
@@ -134,7 +143,16 @@ class RBTree {
       nParent->right->parent = x;
 
     nParent->right = x;
-    x->size = x->left->size + x->right->size + 1;
+    int left_size = 0;
+    int right_size = 0;
+    if(x->left != nullptr) {
+        left_size = x->left->size;
+    }
+    if(x->right != nullptr) {
+      right_size = x->right->size;
+    }
+
+    x->size = right_size + left_size + 1;
   }
 
   static void swapColors(Node* x1, Node* x2) {
@@ -145,10 +163,14 @@ class RBTree {
   }
 
   static void swapValues(Node* u, Node* v) {
-    int temp;
-    temp = u->val;
-    u->val = v->val;
-    v->val = temp;
+      Product temp;
+      int temp_size;
+      temp = u->val;
+      temp_size = u->size;
+      u->val = v->val;
+      u->size = v->size;
+      v->val = temp;
+      v->size = temp_size;
   }
 
   void fixRedRed(Node* x) {
@@ -383,7 +405,7 @@ class RBTree {
       curr = q.front();
       q.pop();
 
-      cout << curr->val << " ";
+      cout << curr->val.name << " ";
 
       if (curr->left != nullptr)
         q.push(curr->left);
@@ -396,7 +418,7 @@ class RBTree {
     if (x == nullptr)
       return;
     inorder(x->left);
-    cout << x->val << " " << x->size << endl;
+    cout << x->val.name << " " << x->size << endl;
     inorder(x->right);
   }
 
@@ -409,15 +431,15 @@ public:
   // searches for given value
   // if found returns the node (used for delete)
   // else returns the last node while traversing (used in insert)
-  Node* search(int n) {
+  Node* search(string s) {
     Node* temp = root;
     while (temp != nullptr) {
-      if (n < temp->val) {
+      if (s < temp->val.name) {
         if (temp->left == nullptr)
           break;
         else
           temp = temp->left;
-      } else if (n == temp->val) {
+      } else if (s == temp->val.name) {
         break;
       } else {
         if (temp->right == nullptr)
@@ -431,15 +453,15 @@ public:
   }
 
 
-  void insert(int n) {
+  void insert(Product n) {
     Node* newNode = new Node(n);
     if (root == nullptr) {
       newNode->color = BLACK;
       root = newNode;
     } else {
-      Node* temp = search(n);
+      Node* temp = search(n.name);
 
-      if (temp->val == n) {
+      if (temp->val.name == n.name) {
         return;
       }
 
@@ -449,7 +471,7 @@ public:
       // connect new node to correct node
       newNode->parent = temp;
 
-      if (n < temp->val)
+      if (n.name < temp->val.name)
         temp->left = newNode;
       else
         temp->right = newNode;
@@ -463,15 +485,15 @@ public:
   }
 
   // utility function that deletes the node with given value
-  void deleteByVal(int n) {
+  void deleteByVal(Product n) {
     if (root == nullptr)
       // Tree is empty
       return;
 
-    Node* v = search(n), *u;
+    Node* v = search(n.name), *u;
 
-    if (v->val != n) {
-      cout << "No node found to delete with value:" << n << endl;
+    if (v->val.name != n.name) {
+      cout << "No node found to delete with value:" << n.name << endl;
       return;
     }
 
@@ -524,39 +546,24 @@ public:
   }
 };
 
+RBTree create_tree(vector<Product*> products) {
+    RBTree tree;
+    for(auto product:products) {
+        cout << product->name << endl;
+        tree.insert(*product);
+    }
+    return tree;
+}
+
 int main() {
-  RBTree tree;
 
-  tree.insert(7);
-  tree.insert(3);
-  tree.insert(18);
-  tree.insert(10);
-  tree.insert(22);
-  tree.insert(8);
-  tree.insert(11);
-  tree.insert(26);
-  tree.insert(2);
-  tree.insert(6);
-  tree.insert(13);
+    vector<Product*> products;
+    products = collect_data();
+    print_products(products);
 
-  tree.printInOrder();
-  tree.printLevelOrder();
-
-  cout<<endl<<"Deleting 18, 11, 3, 10, 22"<<endl;
-
-  tree.deleteByVal(18);
-  tree.deleteByVal(11);
-  tree.deleteByVal(3);
-  tree.deleteByVal(10);
-  tree.deleteByVal(22);
-
-  tree.printInOrder();
-  tree.printLevelOrder();
-
-  vector<Product*> products;
-  products = collect_data();
-
-  print_products(products);
+    RBTree tree = create_tree(products);
+    tree.printInOrder();
+    tree.printLevelOrder();
 
   return 0;
 }
