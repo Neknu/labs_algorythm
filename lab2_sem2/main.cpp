@@ -418,7 +418,7 @@ class RBTree {
     if (x == nullptr)
       return;
     inorder(x->left);
-    cout << x->val.name << " " << x->size << endl;
+    print_product(&x->val);
     inorder(x->right);
   }
 
@@ -549,7 +549,6 @@ public:
 RBTree create_tree(vector<Product*> products) {
     RBTree tree;
     for(auto product:products) {
-        cout << product->name << endl;
         tree.insert(*product);
     }
     return tree;
@@ -564,6 +563,20 @@ int main() {
     RBTree tree = create_tree(products);
     tree.printInOrder();
     tree.printLevelOrder();
+
+    cout << endl;
+    cout << "search product by name apple" << endl;
+    print_product(&tree.search("apple")->val);
+
+    cout << endl;
+    cout << "select 5th element of inorder tree" << endl;
+    Product product = tree.OSSelect(5)->val;
+    print_product(&product);
+
+    cout << endl;
+    cout << "search rank for that node" << endl;
+    Node* node = tree.search(product.name);
+    cout << tree.OSRank(node) << endl;
 
   return 0;
 }
