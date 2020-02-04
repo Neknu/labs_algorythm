@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <iomanip>
 
 #include "sqlite3.h"
@@ -90,11 +89,11 @@ void print_products(const vector<Product*> &products) {
 }
 
 struct Node {
-    int key;
+    Product* key;
     Node* left, *right;
 };
 
-Node* newNode(int key)
+Node* newNode(Product* key)
 {
     Node* node = new Node();
     node->key = key;
@@ -123,17 +122,17 @@ Node* leftRotate(Node* x)
 // If key is not present, then it 
 // brings the last accessed item at  
 // root.
-Node* splay(Node* root, int key)
+Node* splay(Node* root, Product* key)
 {
-    if (root == nullptr || root->key == key)
+    if (root == nullptr || root->key->name == key->name)
         return root;
 
-    if (root->key > key)
+    if (root->key->name > key->name)
     {
         if (root->left == nullptr) return root;
 
         // Zig-Zig (Left Left)  
-        if (root->left->key > key)
+        if (root->left->key->name > key->name)
         {
             // First recursively bring the 
             // key as root of left-left  
@@ -143,7 +142,7 @@ Node* splay(Node* root, int key)
             // second rotation is done after else  
             root = rightRotate(root);
         }
-        else if (root->left->key < key) // Zig-Zag (Left Right)  
+        else if (root->left->key->name < key->name) // Zig-Zag (Left Right)
         {
             // First recursively bring 
             // the key as root of left-right  
@@ -162,7 +161,7 @@ Node* splay(Node* root, int key)
         if (root->right == nullptr) return root;
 
         // Zag-Zig (Right Left)  
-        if (root->right->key > key)
+        if (root->right->key->name > key->name)
         {
             // Bring the key as root of right-left  
             root->right->left = splay(root->right->left, key);
@@ -171,7 +170,7 @@ Node* splay(Node* root, int key)
             if (root->right->left != nullptr)
                 root->right = rightRotate(root->right);
         }
-        else if (root->right->key < key)// Zag-Zag (Right Right)  
+        else if (root->right->key->name < key->name)// Zag-Zag (Right Right)
         {
             // Bring the key as root of  
             // right-right and do first rotation  
@@ -187,27 +186,27 @@ Node* splay(Node* root, int key)
 // this function returns the
 // new root of Splay Tree. If key is  
 // present in tree then, it is moved to root.  
-Node* search(Node* root, int key)
+Node* search(Node* root, Product* key)
 {
     return splay(root, key);
 }
 
 
-Node* insert(Node* root, int k)
+Node* insert(Node* root, Product* k)
 {
     if (root == nullptr) return newNode(k);
 
     // Bring the closest leaf node to root  
     root = splay(root, k);
 
-    if (root->key == k) return root;
+    if (root->key->name == k->name) return root;
 
     Node* newnode = newNode(k);
 
     // If root's key is greater, make  
     // root as right child of newnode  
     // and copy the left child of root to newnode  
-    if (root->key > k)
+    if (root->key->name > k->name)
     {
         newnode->right = root;
         newnode->left = root->left;
@@ -227,7 +226,7 @@ Node* insert(Node* root, int k)
     return newnode;
 }
 
-struct Node* delete_key(struct Node* root, int key)
+struct Node* delete_key(struct Node* root, Product* key)
 {
     struct Node* temp;
     if (!root)
@@ -235,7 +234,7 @@ struct Node* delete_key(struct Node* root, int key)
 
     root = splay(root, key);
 
-    if (key != root->key)
+    if (key->name != root->key->name)
         return root;
 
     if (!root->left)
@@ -267,7 +266,7 @@ void preOrder(Node* root)
 {
     if (root != nullptr)
     {
-        cout<<root->key<<" ";
+        print_product(root->key);
         preOrder(root->left);
         preOrder(root->right);
     }
@@ -290,17 +289,27 @@ int main() {
 //    cout << "Preorder traversal of the modified Splay tree is \n";
 //    preOrder(root);
 
-    struct Node* root = newNode(6);
-    root->left = newNode(1);
-    root->right = newNode(9);
-    root->left->right = newNode(4);
-    root->left->right->left = newNode(2);
-    root->right->left = newNode(7);
+//    struct Node* root = newNode(6);
+//    root->left = newNode(1);
+//    root->right = newNode(9);
+//    root->left->right = newNode(4);
+//    root->left->right->left = newNode(2);
+//    root->right->left = newNode(7);
+//
+//    int key = 4;
+//
+//    root = delete_key(root, key);
+//    printf("Preorder traversal of the modified Splay tree is \n");
+//    preOrder(root);
 
-    int key = 4;
+    Node* root = nullptr;
 
-    root = delete_key(root, key);
-    printf("Preorder traversal of the modified Splay tree is \n");
+    products.resize(10);
+    for(auto product:products) {
+        root = insert(root, product);
+    }
+
+    cout << "PREORDER TREE:" << endl;
     preOrder(root);
 
     return 0;
