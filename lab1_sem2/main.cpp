@@ -121,8 +121,29 @@ vector<Node*> create_hash(const vector<Product*> &products) {
 }
 
 Product* getProductByName(vector<Node*> hash, const string &name) {
-    Node* h = hash[hash_product_name(name, hash.size())];
-    return h->hash_product[hash_product_name(name, h->m, h->a, h->b)];
+    int hsh = hash_product_name(name, hash.size());
+    if(hsh > hash.size() ) {
+        cout << "please, write existing product!" << endl;
+        return nullptr;
+    }
+    Node* h = hash[hsh];
+    if(h->hash_product.size() == 0) {
+        cout << "please, write existing product!" << endl;
+        return nullptr;
+    }
+
+    hsh = hash_product_name(name, h->m, h->a, h->b);
+    if(hsh < h->hash_product.size()) {
+        Product *res = h->hash_product[hsh];
+        if (res->name != name) {
+            cout << "please, write existing product!" << endl;
+            return nullptr;
+        }
+        return res;
+    } else {
+        cout << "please, write existing product!" << endl;
+        return nullptr;
+    }
 }
 
 void print_product(Product* product) {
@@ -143,12 +164,16 @@ int main() {
     products = collect_data();
     print_products(products);
     vector<Node*> hash = create_hash(products);
+
     cout << "Now please write what product you want: " << endl;
     cout << "(please write only existing product, or error or incomplete data arise)" << endl;
     string product_name;
-    cin >> product_name;
-
-    print_product(getProductByName(hash, product_name));
+    while (cin >> product_name) {
+        Product* product = getProductByName(hash, product_name);
+        if(product)
+            print_product(product);
+        cout << "Now please write what product you want: " << endl;
+    }
 
     return 0;
 }

@@ -431,15 +431,15 @@ public:
   // searches for given value
   // if found returns the node (used for delete)
   // else returns the last node while traversing (used in insert)
-  Node* search(string s) {
+  Node* search(int c) {
     Node* temp = root;
     while (temp != nullptr) {
-      if (s < temp->val.name) {
+      if (c < temp->val.cost) {
         if (temp->left == nullptr)
           break;
         else
           temp = temp->left;
-      } else if (s == temp->val.name) {
+      } else if (c == temp->val.cost) {
         break;
       } else {
         if (temp->right == nullptr)
@@ -459,9 +459,9 @@ public:
       newNode->color = BLACK;
       root = newNode;
     } else {
-      Node* temp = search(n.name);
+      Node* temp = search(n.cost);
 
-      if (temp->val.name == n.name) {
+      if (temp->val.cost == n.cost) {
         return;
       }
 
@@ -471,7 +471,7 @@ public:
       // connect new node to correct node
       newNode->parent = temp;
 
-      if (n.name < temp->val.name)
+      if (n.cost < temp->val.cost)
         temp->left = newNode;
       else
         temp->right = newNode;
@@ -490,7 +490,7 @@ public:
       // Tree is empty
       return;
 
-    Node* v = search(n.name), *u;
+    Node* v = search(n.cost), *u;
 
     if (v->val.name != n.name) {
       cout << "No node found to delete with value:" << n.name << endl;
@@ -565,18 +565,10 @@ int main() {
     tree.printLevelOrder();
 
     cout << endl;
-    cout << "search product by name apple" << endl;
-    print_product(&tree.search("apple")->val);
-
-    cout << endl;
-    cout << "select 5th element of inorder tree" << endl;
+    cout << "select 5th element by cost of inorder tree" << endl;
     Product product = tree.OSSelect(5)->val;
     print_product(&product);
 
-    cout << endl;
-    cout << "search rank for that node" << endl;
-    Node* node = tree.search(product.name);
-    cout << tree.OSRank(node) << endl;
 
   return 0;
 }
