@@ -68,7 +68,6 @@ template<typename T> void printElement(T t, const int& width) {
 }
 
 void print_product(Product* product) {
-//    cout << "name: " << product->name << " -- group: " << product->group << " -- cost: " << product-
     printElement(product->name, nameWidth);
     printElement(product->group, nameWidth);
     printElement(product->cost, numWidth);
@@ -90,16 +89,11 @@ void print_products(const vector<Product*> &products) {
     cout << endl;
 }
 
-class Node
-{
-public:
+struct Node {
     int key;
     Node* left, *right;
 };
 
-/* Helper function that allocates  
-a new Node with the given key and  
-    nullptr left and right pointers. */
 Node* newNode(int key)
 {
     Node* node = new Node();
@@ -108,9 +102,6 @@ Node* newNode(int key)
     return (node);
 }
 
-// A utility function to right  
-// rotate subtree rooted with y  
-// See the diagram given above.  
 Node* rightRotate(Node* x)
 {
     Node* y = x->left;
@@ -119,9 +110,6 @@ Node* rightRotate(Node* x)
     return y;
 }
 
-// A utility function to left  
-// rotate subtree rooted with x  
-// See the diagram given above.  
 Node* leftRotate(Node* x)
 {
     Node* y = x->right;
@@ -134,19 +122,14 @@ Node* leftRotate(Node* x)
 // root if key is present in tree.  
 // If key is not present, then it 
 // brings the last accessed item at  
-// root. This function modifies the 
-// tree and returns the new root  
+// root.
 Node* splay(Node* root, int key)
 {
-    // Base cases: root is nullptr or 
-    // key is present at root  
     if (root == nullptr || root->key == key)
         return root;
 
-    // Key lies in left subtree  
     if (root->key > key)
     {
-        // Key is not in tree, we are done  
         if (root->left == nullptr) return root;
 
         // Zig-Zig (Left Left)  
@@ -176,7 +159,6 @@ Node* splay(Node* root, int key)
     }
     else // Key lies in right subtree  
     {
-        // Key is not in tree, we are done  
         if (root->right == nullptr) return root;
 
         // Zag-Zig (Right Left)  
@@ -202,8 +184,7 @@ Node* splay(Node* root, int key)
     }
 }
 
-// The search function for Splay tree.  
-// Note that this function returns the  
+// this function returns the
 // new root of Splay Tree. If key is  
 // present in tree then, it is moved to root.  
 Node* search(Node* root, int key)
@@ -211,9 +192,77 @@ Node* search(Node* root, int key)
     return splay(root, key);
 }
 
-// A utility function to print  
-// preorder traversal of the tree.  
-// The function also prints height of every Node  
+
+Node* insert(Node* root, int k)
+{
+    if (root == nullptr) return newNode(k);
+
+    // Bring the closest leaf node to root  
+    root = splay(root, k);
+
+    if (root->key == k) return root;
+
+    Node* newnode = newNode(k);
+
+    // If root's key is greater, make  
+    // root as right child of newnode  
+    // and copy the left child of root to newnode  
+    if (root->key > k)
+    {
+        newnode->right = root;
+        newnode->left = root->left;
+        root->left = nullptr;
+    }
+
+        // If root's key is smaller, make  
+        // root as left child of newnode  
+        // and copy the right child of root to newnode  
+    else
+    {
+        newnode->left = root;
+        newnode->right = root->right;
+        root->right = nullptr;
+    }
+
+    return newnode;
+}
+
+struct Node* delete_key(struct Node* root, int key)
+{
+    struct Node* temp;
+    if (!root)
+        return nullptr;
+
+    root = splay(root, key);
+
+    if (key != root->key)
+        return root;
+
+    if (!root->left)
+    {
+        temp = root;
+        root = root->right;
+    }
+    else
+    {
+        temp = root;
+
+        /*Note: Since key == root->key,
+        so after Splay(key, root->lchild),
+        the tree we get will have no right child tree
+        and maximum node in left subtree will get splayed*/
+        // New root
+        root = splay(root->left, key);
+
+        root->right = temp->right;
+    }
+
+    free(temp);
+
+    return root;
+
+}
+
 void preOrder(Node* root)
 {
     if (root != nullptr)
@@ -228,5 +277,31 @@ int main() {
     vector<Product*> products;
     products = collect_data();
     print_products(products);
+
+//    Node* root = newNode(100);
+//    root->left = newNode(50);
+//    root->right = newNode(200);
+//    root->left->left = newNode(40);
+//    root->left->left->left = newNode(30);
+//    root->left->left->left->left = newNode(20);
+//
+////    root = search(root, 20);
+//    root = insert(root, 25);
+//    cout << "Preorder traversal of the modified Splay tree is \n";
+//    preOrder(root);
+
+    struct Node* root = newNode(6);
+    root->left = newNode(1);
+    root->right = newNode(9);
+    root->left->right = newNode(4);
+    root->left->right->left = newNode(2);
+    root->right->left = newNode(7);
+
+    int key = 4;
+
+    root = delete_key(root, key);
+    printf("Preorder traversal of the modified Splay tree is \n");
+    preOrder(root);
+
     return 0;
 }
