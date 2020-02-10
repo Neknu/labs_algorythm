@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iomanip>
+#include <algorithm>
 
 #include "sqlite3.h"
 
@@ -14,6 +15,8 @@ using std::endl;
 const char separator = ' ';
 const int nameWidth = 35;
 const int numWidth = 5;
+
+const int MAX_N = 100;
 
 struct Product {
     int id;
@@ -100,14 +103,35 @@ void print_products(const vector<Product*> &products) {
     cout << endl;
 }
 
+struct Node {
+    Product* data;
+    Node* left;
+    Node* right;
+};
 
-int sum(int freq[], int i, int j);
+Node* newNode(Product* product, Node *left, Node* right) {
+    auto new_node = new Node();
+    new_node->data = product;
+    new_node->left = left;
+    new_node->right = right;
+    return new_node;
+}
 
-int optimalSearchTree(int freq[], int fails[], int n)
+Node* buildTree(const vector<Product*>& products, int root[][MAX_N], int low, int high) {
+    if(low > high) {
+        return nullptr;
+    } else {
+        int current_root = root[low][high];
+        return newNode(products[current_root], buildTree(products, root, low, current_root - 1), buildTree(products, root, current_root + 1, high));
+    }
+}
+
+
+Node* optimalSearchTree(int freq[], int fails[], int n, const vector<Product*>& products)
 {
     int cost[n+2][n+1];
     int possibility[n+2][n+1];
-    int root[n+1][n+1];
+    int root[MAX_N][MAX_N];
 
     for (int i = 1; i <= n+1; i++) {
         cost[i][i-1] = fails[i-1];
@@ -130,7 +154,9 @@ int optimalSearchTree(int freq[], int fails[], int n)
         }
     }
 
-    cout << "COSTS:" << endl;
+    cout << "Cost of Optimal BST in COSTS:" << cost[1][n] << endl;
+
+    cout << endl << "COSTS:" << endl;
     for(int i = 1; i < n + 2; i++) {
         for(int j = 0; j < n + 1; j++) {
             if(i <= j+1) {
@@ -169,28 +195,32 @@ int optimalSearchTree(int freq[], int fails[], int n)
         cout << endl;
     }
 
-    return cost[1][n];
+    return buildTree(products, root, 1, n);
 }
 
-// A utility function to get sum of array elements
-// freq[i] to freq[j]
-int sum(int freq[], int i, int j)
+void preOrder(Node* root)
 {
-    int s = 0;
-    for (int k = i; k <= j; k++)
-        s += freq[k];
-    return s;
+    if (root != nullptr)
+    {
+        print_product(root->data);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
 }
-
 
 int main() {
-//    vector<Product*> products = collect_data();
-//    print_products(products);
+    vector<Product*> products = collect_data();
+    print_products(products);
 
     int freq[] = {0, 15, 10, 5, 10, 20}; // in percents
     int fails[] = {5, 10, 5, 5, 5, 10}; // in percents
     int n = 5;
-    int result = optimalSearchTree(freq, fails, n);
-    cout << "Cost of Optimal BST in COSTS:" << result << endl;
+    products.resize(n);
+    auto compare = [](const Product* a, const Product* b) {
+        return a->name < b->name;};
+    std::sort(products.begin(), products.end(),compare);
+    Node* root = optimalSearchTree(freq, fails, n, products);
+    cout << endl << "This is pre order TREE:" << endl;
+    preOrder(root);
     return 0;
 }
