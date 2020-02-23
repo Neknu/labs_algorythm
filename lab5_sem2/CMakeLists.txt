@@ -3,4 +3,4 @@ project(lab5_sem2)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(lab5_sem2 main.cpp)
+add_executable(lab5_sem2 main.cpp sqlite3.h sqlite3.c)
