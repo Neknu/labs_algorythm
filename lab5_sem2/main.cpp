@@ -117,7 +117,7 @@ struct Node {
 };
 
 struct Node *newNode(Product item) {
-    struct Node *temp =  (struct Node *)malloc(sizeof(struct Node));
+    struct Node *temp =  new Node;
     temp->key = item;
     temp->left = temp->right = nullptr;
     return temp;
@@ -183,12 +183,12 @@ struct Node* deleteNode(struct Node* root, Product key) {
         // Node with only one child or no child
         if (root->left == nullptr) {
             struct Node *temp = root->right;
-            free(root);
+            delete(root);
             return temp;
         }
         else if (root->right == nullptr) {
             struct Node *temp = root->left;
-            free(root);
+            delete(root);
             return temp;
         }
 
@@ -221,12 +221,12 @@ struct Node* deleteNodePersistent(struct Node* root, Product key) {
     {
         if (root->left == nullptr) {
             struct Node *temp = root->right;
-            free(new_root);
+            delete(new_root);
             return temp;
         }
         else if (root->right == nullptr) {
             struct Node *temp = root->left;
-            free(new_root);
+            delete(new_root);
             return temp;
         }
 
@@ -265,6 +265,25 @@ void printTree(OStream& os, const Node* root, std::string indent = "", bool last
     }
 }
 
+void print_menu() {
+    cout << endl;
+    cout << "SELECT YOUR CHOICE:" << endl;
+    cout << "1 - add product to the tree by id" << endl;
+    cout << "2 - delete product from the tree by id" << endl;
+    cout << endl;
+}
+
+void print_roots(vector<Node*> roots) {
+    cout << endl;
+
+    for(int i = 0; i < roots.size(); i++) {
+        cout << "This is version-" << i << endl;
+        printTree(cout, roots[i]);
+    }
+
+    cout << endl;
+}
+
 
 int main() {
 
@@ -273,48 +292,53 @@ int main() {
 
     vector<Node*> roots;
 
-    struct Node *root = nullptr;
-    for(int i = 0; i < 10; i++)
-        insert(root, *products[i]);
+    struct Node* root = nullptr;
+    struct Node* new_root = nullptr;
 
-//    printf("Inorder traversal of the given tree \n");
-//    printTree(cout, root);
-//
-//    struct Node* new_root;
-//    new_root = insertPersistent(root, 100);
-//
-//    printf("\nVersion 1 \n");
-//    printTree(cout, root);
-//
-//    printf("\nVersion 2 \n");
-//    printTree(cout, new_root);
-//
-//    printf("\nDelete 20\n");
-//    new_root = deleteNodePersistent(root, 20);
-//
-//    printf("\nVersion 1 \n");
-//    printTree(cout, root);
-//
-//    printf("\nVersion 2 \n");
-//    printTree(cout, new_root);
-//
-//    printf("\nDelete 30\n");
-//    new_root = deleteNodePersistent(root, 30);
-//
-//    printf("\nVersion 1 \n");
-//    printTree(cout, root);
-//
-//    printf("\nVersion 2 \n");
-//    printTree(cout, new_root);
-//
-//    printf("\nDelete 50\n");
-//    new_root = deleteNodePersistent(root, 50);
-//
-//    printf("\nVersion 1 \n");
-//    printTree(cout, root);
-//
-//    printf("\nVersion 2 \n");
-//    printTree(cout, new_root);
+    root = insert(root, *products[11]);
+    printTree(cout, root);
+
+    for(int i = 0; i < 5; i++) {
+        root = insert(root, *products[i]);
+    }
+
+    roots.push_back(root);
+
+    while(true) {
+        int operation;
+        string name;
+        int id;
+        print_roots(roots);
+        print_menu();
+        cin >> operation;
+        switch(operation) {
+            case 1:
+                cout << "Enter id of product to insert" << endl;
+                cin >> id;
+                if(id < 0 || id >= products.size()) {
+                    cout << "select correct id!" << endl;
+                    continue;
+                }
+
+                new_root = insertPersistent(roots[roots.size()-1], *products[id-1]);
+                roots.push_back(new_root);
+                break;
+
+            case 2:
+                cout << "Enter id of product to delete" << endl;
+                cin >> id;
+                if(id < 0 || id >= products.size()) {
+                    cout << "select correct id!" << endl;
+                    continue;
+                }
+
+                new_root = deleteNodePersistent(roots[roots.size()-1], *products[id-1]);
+                roots.push_back(new_root);
+                break;
+            default:
+                return 0;
+        }
+    }
 
 
     return 0;
