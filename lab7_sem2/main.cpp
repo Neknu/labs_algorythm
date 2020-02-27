@@ -1,5 +1,3 @@
-#include<cstdio>
-#include<cstdlib>
 #include <string>
 #include <windows.h>
 #include <iostream>
@@ -298,16 +296,6 @@ void printTree(OStream& os, const Node* root, std::string indent = "", bool last
     }
 }
 
-// print function for Binomial Tree 
-void printTree(Node* h) { 
-	while (h) { 
-		cout << h->data.name << " ";
-		printTree(h->child); 
-		h = h->sibling; 
-	} 
-} 
-
-// print function for binomial heap 
 void printHeap(list<Node*> _heap) {
 
     cout << "This is Binomial Heap:" << endl;
@@ -328,7 +316,6 @@ void print_menu() {
 }
 
 
-// Driver program to test above functions 
 int main() {
     vector<Product*> products = collect_data();
     print_products(products);
