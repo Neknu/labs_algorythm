@@ -358,7 +358,47 @@ void Deletion(Product val) {
 		Extract_min(); 
 		cout << "Key Deleted" << endl; 
 	} 
-} 
+}
+
+int count_sibling(const node* root) {
+    if (!root)
+        return 0;
+    string temp = root->key.name;
+    int res = 0;
+    while(root->right && root->right->key.name != temp) {
+        root = root->right;
+        res++;
+    }
+    return res;
+}
+
+template<typename OStream>
+void printTree(OStream& os, const node* root, int prev_value = 0, std::string indent = "", bool last = true) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+    os << indent;
+    if (last) {
+        os << "Sibling----";
+        indent += "     ";
+    }
+    else {
+        os << "Child----";
+        indent += "|    ";
+    }
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    os << root->key.cost << '\n';
+
+
+    if (root->child) {
+        printTree(os, root->child, 0, indent, false);
+    }
+    if (root->left && prev_value < count_sibling(root)) {
+        printTree(os, root->left, prev_value + 1, indent, true);
+    }
+
+}
+
+
 
 // Function to display the heap 
 void display() { 
@@ -367,43 +407,95 @@ void display() {
 		cout << "The Heap is Empty" << endl; 
 
 	else { 
-		cout << "The root nodes of Heap are: " << endl; 
-		do { 
-			print_product(&ptr->key);
-			ptr = ptr->right; 
-			if (ptr != mini) { 
-				cout << "-->"; 
-			} 
-		} while (ptr != mini && ptr->right != nullptr); 
+		cout << "The root nodes of Heap are: " << endl;
+		printTree(cout, ptr);
+
 		cout << endl 
 			<< "The heap has " << no_of_nodes << " nodes" << endl 
 			<< endl; 
 	} 
-} 
+}
+
+
+void print_menu() {
+    cout << endl;
+    cout << "SELECT YOUR CHOICE:" << endl;
+    cout << "1 - add product to the tree by id" << endl;
+    cout << "2 - extract min" << endl;
+    cout << "3 - delete by id" << endl;
+    cout << endl;
+}
+
 
 int main() {
 
     vector<Product*> products = collect_data();
     print_products(products);
 
-	cout << "Creating an initial heap" << endl; 
-	insertion(*products[5]);
-	insertion(*products[8]);
-	insertion(*products[7]);
+//	cout << "Creating an initial heap" << endl;
+//	insertion(*products[5]);
+//	insertion(*products[8]);
+//	insertion(*products[7]);
+//
+//	display();
+//
+//	cout << "Extracting min" << endl;
+//	Extract_min();
+//	display();
+//
+//	cout << "Decrease value of product[8] to 7" << endl;
+//	Find(mini, *products[8], 7);
+//	display();
+//
+//	cout << "Delete the node 7" << endl;
+//	Deletion(*products[8]);
+//	display();
 
-	display(); 
 
-	cout << "Extracting min" << endl;
-	Extract_min();
-	display();
+    for(int i = 0; i < 25; i++) {
+        insertion(*products[i]);
+    }
 
-	cout << "Decrease value of product 8 to 7" << endl;
-	Find(mini, *products[8], 7);
-	display();
+    while(true) {
+        int operation;
+        string name;
+        int id;
+        node* temp;
+        display();
+        print_menu();
+        cin >> operation;
+        switch(operation) {
+            case 1:
+                cout << "Enter id of product to insert" << endl;
+                cin >> id;
+                if(id < 0 || id >= products.size()) {
+                    cout << "select correct id!" << endl;
+                    continue;
+                }
 
-	cout << "Delete the node 7" << endl;
-	Deletion(*products[8]);
-	display();
+                insertion(*products[id-1]);
+                break;
+
+            case 2:
+                Extract_min();
+
+                break;
+
+            case 3:
+                cout << "Enter id of product to delete" << endl;
+                cin >> id;
+                if(id < 0 || id >= products.size()) {
+                    cout << "select correct id!" << endl;
+                    continue;
+                }
+
+                Deletion(*products[id-1]);
+                break;
+
+            default:
+                return 0;
+        }
+    }
 
 	return 0; 
 } 
