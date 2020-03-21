@@ -128,10 +128,10 @@ struct node {
 
 struct node* mini = nullptr; 
 
-// Declare an integer for number of nodes in the heap 
+
 int no_of_nodes = 0; 
 
-// Function to insert a node in heap 
+
 void insertion(Product val) {
 	struct node* new_node = new node;
 	new_node->key = val; 
@@ -155,7 +155,7 @@ void insertion(Product val) {
 	} 
 	no_of_nodes++; 
 } 
-// Linking the heap nodes in parent child relationship 
+
 void Fibonnaci_link(struct node* ptr2, struct node* ptr1) { 
 	(ptr2->left)->right = ptr2->right; 
 	(ptr2->right)->left = ptr2->left; 
@@ -174,7 +174,7 @@ void Fibonnaci_link(struct node* ptr2, struct node* ptr1) {
 		ptr1->child = ptr2; 
 	ptr1->degree++; 
 } 
-// Consolidating the heap 
+
 void Consolidate() { 
 	int temp1; 
 	double temp2 = (log(no_of_nodes)) / (log(2));
@@ -231,7 +231,7 @@ void Consolidate() {
 	} 
 } 
 
-// Function to extract minimum node in the heap 
+
 void Extract_min() { 
 	if (mini == nullptr) 
 		cout << "The heap is empty" << endl; 
@@ -268,7 +268,7 @@ void Extract_min() {
 	} 
 } 
 
-// Cutting a node in the heap to be placed in the root list 
+
 void Cut(struct node* found, struct node* temp) { 
 	if (found == found->right) 
 		temp->child = nullptr; 
@@ -289,7 +289,7 @@ void Cut(struct node* found, struct node* temp) {
 	found->mark = 'B'; 
 } 
 
-// Recursive cascade cutting function 
+
 void Cascase_cut(struct node* temp) { 
 	node* ptr5 = temp->parent; 
 	if (ptr5 != nullptr) { 
@@ -303,7 +303,7 @@ void Cascase_cut(struct node* temp) {
 	} 
 } 
 
-// Function to decrease the value of a node in the heap 
+
 void Decrease_key(struct node* found, int val) {
 	if (mini == nullptr) 
 		cout << "The Heap is Empty" << endl; 
@@ -322,7 +322,7 @@ void Decrease_key(struct node* found, int val) {
 		mini = found; 
 } 
 
-// Function to find the given node 
+
 void Find(struct node* mini, Product old_val, int val) {
 	struct node* found = nullptr;
 	node* temp5 = mini;
@@ -344,7 +344,7 @@ void Find(struct node* mini, Product old_val, int val) {
 	found = found_ptr;
 }
 
-// Deleting a node from the heap 
+
 void Deletion(Product val) {
 	if (mini == nullptr) 
 		cout << "The heap is empty" << endl; 
@@ -372,35 +372,46 @@ int count_sibling(const node* root) {
     return res;
 }
 
+template<typename T>
+void pop_front(std::vector<T> &v)
+{
+    if (v.size() > 0) {
+        v.erase(v.begin());
+    }
+}
+
 template<typename OStream>
-void printTree(OStream& os, const node* root, int prev_value = 0, std::string indent = "", bool last = true) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
-    os << indent;
-    if (last) {
-        os << "Sibling----";
-        indent += "     ";
+void printTree(OStream& os, node* root) {
+    string indent;
+    vector<node*> queue;
+    queue.push_back(root);
+    vector<node*> current_root;
+    current_root.push_back(root);
+    while(!queue.empty()) {
+        node* current = queue[0];
+        if(current->child) {
+            os << indent;
+            os << "Child----";
+            indent += "|    ";
+            os << current->key.cost << '\n';
+            queue.push_back(current->child);
+            current_root.push_back(current->child);
+        }
+        if(current->right && current->right != current_root[0]) {
+            os << indent;
+            os << "Sibling----";
+            os << current->key.cost << '\n';
+            queue.push_back(current->right);
+            current_root.push_back(current_root[0]);
+        }
+        pop_front(queue);
+        pop_front(current_root);
     }
-    else {
-        os << "Child----";
-        indent += "|    ";
-    }
-
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-    os << root->key.cost << '\n';
-
-
-    if (root->child) {
-        printTree(os, root->child, 0, indent, false);
-    }
-    if (root->left && prev_value < count_sibling(root)) {
-        printTree(os, root->left, prev_value + 1, indent, true);
-    }
-
 }
 
 
 
-// Function to display the heap 
+
 void display() { 
 	node* ptr = mini; 
 	if (ptr == nullptr) 
@@ -429,28 +440,9 @@ void print_menu() {
 
 int main() {
 
+    bool is_extract = false;
     vector<Product*> products = collect_data();
     print_products(products);
-
-//	cout << "Creating an initial heap" << endl;
-//	insertion(*products[5]);
-//	insertion(*products[8]);
-//	insertion(*products[7]);
-//
-//	display();
-//
-//	cout << "Extracting min" << endl;
-//	Extract_min();
-//	display();
-//
-//	cout << "Decrease value of product[8] to 7" << endl;
-//	Find(mini, *products[8], 7);
-//	display();
-//
-//	cout << "Delete the node 7" << endl;
-//	Deletion(*products[8]);
-//	display();
-
 
     for(int i = 0; i < 25; i++) {
         insertion(*products[i]);
@@ -473,11 +465,17 @@ int main() {
                     continue;
                 }
 
+                is_extract = false;
+
                 insertion(*products[id-1]);
                 break;
 
             case 2:
                 Extract_min();
+                if(is_extract) {
+                    return 0;
+                }
+                is_extract = true;
 
                 break;
 
