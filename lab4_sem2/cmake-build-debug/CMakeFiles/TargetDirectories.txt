@@ -1,0 +1,3 @@
+D:/University/course2/labs_algorythm/lab4_sem2/cmake-build-debug/CMakeFiles/lab4_sem2.dir
+D:/University/course2/labs_algorythm/lab4_sem2/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/University/course2/labs_algorythm/lab4_sem2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

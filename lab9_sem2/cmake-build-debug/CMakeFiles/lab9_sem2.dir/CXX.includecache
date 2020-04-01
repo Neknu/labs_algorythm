@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/University/course2/labs_algorythm/lab9_sem2/main.cpp
+iostream
+-
+vector
+-
+climits
+-
+exception
+-
+set
+-
+string
+-
+iomanip
+-
+cmath
+-
+sqlite3.h
+D:/University/course2/labs_algorythm/lab9_sem2/sqlite3.h
+
+D:/University/course2/labs_algorythm/lab9_sem2/sqlite3.h
+stdarg.h
+-
+
